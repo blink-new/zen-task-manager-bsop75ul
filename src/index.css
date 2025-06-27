@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Japanese-inspired color palette */
+    --background: 250 250 250;
+    --foreground: 40 40 40;
+    --card: 255 255 255;
+    --card-foreground: 40 40 40;
+    --popover: 255 255 255;
+    --popover-foreground: 40 40 40;
+    --primary: 120 15% 35%;
+    --primary-foreground: 250 250 250;
+    --secondary: 210 12% 92%;
+    --secondary-foreground: 40 40 40;
+    --muted: 210 12% 95%;
+    --muted-foreground: 120 5% 50%;
+    --accent: 165 20% 88%;
+    --accent-foreground: 40 40 40;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 250 250 250;
+    --border: 210 12% 88%;
+    --input: 210 12% 88%;
+    --ring: 120 15% 35%;
+    --radius: 8px;
+    
+    --zen-stone: 210 8% 92%;
+    --zen-moss: 120 15% 35%;
+    --zen-bamboo: 165 20% 88%;
+    --zen-paper: 50 25% 96%;
+    --zen-ink: 210 15% 25%;
+    --zen-shadow: 210 10% 85%;
+  }
+
+  .dark {
+    --background: 210 15% 8%;
+    --foreground: 210 8% 90%;
+    --card: 210 15% 12%;
+    --card-foreground: 210 8% 90%;
+    --popover: 210 15% 12%;
+    --popover-foreground: 210 8% 90%;
+    --primary: 165 20% 65%;
+    --primary-foreground: 210 15% 8%;
+    --secondary: 210 15% 16%;
+    --secondary-foreground: 210 8% 90%;
+    --muted: 210 15% 16%;
+    --muted-foreground: 210 8% 65%;
+    --accent: 120 15% 25%;
+    --accent-foreground: 210 8% 90%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 210 8% 90%;
+    --border: 210 15% 20%;
+    --input: 210 15% 20%;
+    --ring: 165 20% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  .zen-card {
+    @apply bg-white/80 backdrop-blur-sm border border-stone-200/50 rounded-lg shadow-sm;
+  }
+  
+  .zen-task {
+    @apply bg-white/60 border border-stone-200/30 rounded-md p-3 text-sm transition-all duration-200;
+  }
+  
+  .zen-task:hover {
+    @apply bg-white/80 border-stone-300/50 shadow-sm transform translate-y-[-1px];
+  }
+  
+  .zen-button {
+    @apply inline-flex items-center justify-center px-3 py-2 text-sm font-medium transition-all duration-200 rounded-md;
+  }
+  
+  .zen-button-primary {
+    @apply zen-button bg-stone-800 text-white hover:bg-stone-700 active:bg-stone-900;
+  }
+  
+  .zen-button-ghost {
+    @apply zen-button text-stone-600 hover:bg-stone-100/80 hover:text-stone-900;
+  }
+  
+  .zen-input {
+    @apply w-full px-3 py-2 text-sm bg-white/60 border border-stone-200/50 rounded-md placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-300/50 focus:border-transparent;
+  }
+  
+  .zen-column {
+    @apply zen-card p-4 min-h-[400px] flex flex-col space-y-3;
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}
