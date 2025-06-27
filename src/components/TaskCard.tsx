@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Check, Edit2, Trash2, X } from 'lucide-react';
 import { Task } from '../types/task';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 
 interface TaskCardProps {
   task: Task;
@@ -13,6 +15,14 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete, on
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [editDescription, setEditDescription] = useState(task.description || '');
+
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
 
   const handleEdit = () => {
     if (editTitle.trim()) {
@@ -80,7 +90,13 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete, on
   }
 
   return (
-    <div className={`zen-task group ${task.completed ? 'opacity-60' : ''} fade-in`}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`zen-task group ${task.completed ? 'opacity-60' : ''} fade-in`}
+    >
       <div className="flex items-start space-x-2">
         <button
           onClick={() => onToggle(task.id)}

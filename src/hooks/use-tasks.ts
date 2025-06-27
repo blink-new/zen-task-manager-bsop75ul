@@ -213,6 +213,54 @@ export const useTasks = () => {
     });
   }, [saveToStorage]);
 
+  // Move task
+  const moveTask = useCallback((taskId: string, newDay: WeekDay | 'weekly') => {
+    setStore(prev => {
+      const newStore = { ...prev };
+      let taskToMove: Task | undefined;
+      let originalDay: WeekDay | 'weekly' | undefined;
+
+      // Find and remove the task from its original location
+      const weeklyIndex = newStore.weeklyTasks.findIndex(task => task.id === taskId);
+      if (weeklyIndex >= 0) {
+        taskToMove = newStore.weeklyTasks[weeklyIndex];
+        newStore.weeklyTasks = newStore.weeklyTasks.filter(task => task.id !== taskId);
+        originalDay = 'weekly';
+      } else {
+        for (const day of WEEK_DAYS) {
+          const dailyIndex = newStore.dailyTasks[day].findIndex(task => task.id === taskId);
+          if (dailyIndex >= 0) {
+            taskToMove = newStore.dailyTasks[day][dailyIndex];
+            newStore.dailyTasks = {
+              ...newStore.dailyTasks,
+              [day]: newStore.dailyTasks[day].filter(task => task.id !== taskId),
+            };
+            originalDay = day;
+            break;
+          }
+        }
+      }
+
+      if (!taskToMove || originalDay === newDay) {
+        return prev; // Task not found or dropped in the same column
+      }
+
+      // Add the task to the new location
+      const updatedTask = { ...taskToMove, updatedAt: new Date() };
+      if (newDay === 'weekly') {
+        newStore.weeklyTasks = [...newStore.weeklyTasks, { ...updatedTask, type: 'weekly' }];
+      } else {
+        newStore.dailyTasks = {
+          ...newStore.dailyTasks,
+          [newDay]: [...newStore.dailyTasks[newDay], { ...updatedTask, type: 'daily', day: newDay }],
+        };
+      }
+
+      saveToStorage(newStore);
+      return newStore;
+    });
+  }, [saveToStorage]);
+
   return {
     weeklyTasks: store.weeklyTasks,
     dailyTasks: store.dailyTasks,
@@ -221,5 +269,6 @@ export const useTasks = () => {
     toggleTask,
     deleteTask,
     editTask,
+    moveTask,
   };
 };

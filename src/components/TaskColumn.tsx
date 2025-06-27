@@ -2,8 +2,10 @@ import React from 'react';
 import { Task } from '../types/task';
 import { TaskCard } from './TaskCard';
 import { AddTaskForm } from './AddTaskForm';
+import { useDroppable } from '@dnd-kit/core';
 
 interface TaskColumnProps {
+  id: string;
   title: string;
   subtitle?: string;
   tasks: Task[];
@@ -16,6 +18,7 @@ interface TaskColumnProps {
 }
 
 export const TaskColumn: React.FC<TaskColumnProps> = ({
+  id,
   title,
   subtitle,
   tasks,
@@ -26,12 +29,16 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
   placeholder,
   isWeekly = false,
 }) => {
+  const { setNodeRef } = useDroppable({
+    id,
+  });
+
   const completedCount = tasks.filter(task => task.completed).length;
   const totalCount = tasks.length;
 
   return (
-    <div className={`zen-column ${isWeekly ? 'bg-gradient-to-br from-stone-50/90 to-stone-100/50 !py-2 !px-3 min-h-[unset] md:min-h-[unset] lg:min-h-[unset]' : ''}`}>
-      <div className="mb-2">
+    <div ref={setNodeRef} className={`zen-column ${isWeekly ? 'bg-gradient-to-br from-stone-50/90 to-stone-100/50' : ''}`}>
+      <div className="mb-4">
         <div className="flex items-center justify-between mb-1">
           <h3 className={`font-medium ${isWeekly ? 'text-lg text-stone-800' : 'text-base text-stone-700'}`}>
             {title}
@@ -47,7 +54,7 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
         )}
       </div>
 
-      <div className="flex-1 space-y-1 overflow-y-auto">
+      <div className="flex-1 space-y-2 overflow-y-auto">
         {tasks.map((task) => (
           <TaskCard
             key={task.id}
@@ -59,14 +66,14 @@ export const TaskColumn: React.FC<TaskColumnProps> = ({
         ))}
         
         {tasks.length === 0 && (
-          <div className="text-center py-4 text-stone-400">
+          <div className="text-center py-8 text-stone-400">
             <div className="text-sm mb-2">No tasks yet</div>
             <div className="text-xs font-jp">静寂</div>
           </div>
         )}
       </div>
 
-      <div className="mt-2">
+      <div className="mt-4">
         <AddTaskForm onAdd={onAddTask} placeholder={placeholder} />
       </div>
     </div>
