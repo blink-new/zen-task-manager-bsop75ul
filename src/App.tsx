@@ -45,8 +45,8 @@ function App() {
         </div>
 
         {/* Weekly Tasks Meta Column */}
-        <div className="mb-8">
-          <div className="max-w-md mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3">
             <TaskColumn
               title="Weekly Goals"
               subtitle="週間目標"
@@ -59,6 +59,8 @@ function App() {
               isWeekly
             />
           </div>
+          {/* Empty divs to fill the rest of the row for alignment */}
+          <div className="hidden xl:block xl:col-span-3"></div>
         </div>
 
         {/* Daily Task Columns */}
